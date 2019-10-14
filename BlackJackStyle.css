@@ -1,0 +1,346 @@
+/**
+ * @author Asaf Gilboa
+ * SV-College Front-End course
+ * Black-Jack project stylesheet
+ * August 2019
+ */
+
+body, html, h1, h2, h3, h4, h5, h6,
+div, .row, article, nav, .mainCont, section {
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+body {
+    /* background: url('images/body-bg.webp'); */
+    background: url('images/card-bg.jpg');
+    background-size: cover;
+}
+
+@font-face {
+    font-family: 'Determination';
+    /*a name to be used later*/
+    src: url('DTM-Mono.otf');
+    /*URL to font*/
+}
+
+/* Main Container */
+.mainCont {
+    display: inline-block;
+    position: relative;
+    height: 95%;
+    width: 90%;
+    margin-top: 1%;
+}
+
+/* bs3 rows, player and dealer each has a top and bottom row */
+.topRow {
+    height: 40%;
+}
+
+.bottomRow {
+    height: 60%;
+}
+
+/* where the cards go. probably unecessary */
+.hand {
+    height: 100%;
+}
+
+/* for columns in the bottom row and the deck on the bottom left */
+.deck, .bottomCol {
+    height: 100%;
+    position: relative;
+}
+
+/* Dealer Container */
+#dealerDiv {
+    height: 50%;
+    /* background: url('images/floweydealer-bg.jpg');
+    background-size: cover; */
+    position: relative;
+    text-align: center;
+}
+
+/* Dealer speech bubble, in the top right of the dealer div */
+#speechBubble {
+    background: url('images/speechBubble.png');
+    background-size: cover;
+    height: 180px;
+    width: 262px;
+    display: inline-block;
+    position: relative;
+    top: 13%;
+    right: 1px;
+    z-index: 1;
+    border-radius: 5%;
+}
+
+#infoBox {
+    position: absolute;
+    height: 130px;
+    width: 200px;
+    top: 5%;
+    right: 8%;
+    font-size: 18px;
+    font-family: 'Determination';
+    color: rgb(17, 0, 0);
+    /* box-shadow: 0 0 20px 2px white inset; */
+    z-index: 2;
+}
+
+/* Player container */
+.playerDiv {
+    height: 50%;
+    /* background: url("images/card-bg.jpg");
+    background-size: cover; */
+    /* border-left: 3.5px solid mediumseagreen;
+    border-right: 3.5px solid mediumseagreen; */
+}
+
+/* individual card divs */
+#player1, #player2, #player3, #player4, #player5,
+#dealer1, #dealer2, #dealer3, #dealer4, #dealer5, .card {
+    background: white;
+    display: inline-block;
+    height: 95%;
+    position: absolute;
+    bottom: 0px;
+    left: 18px;
+    z-index: 2;
+    transform-style: preserve-3d;
+    transition: all ease 1s; /* flip animation */
+}
+
+/* containers for scores (Player Hand: / Dealer Hand: ) */
+.scoreDiv {
+    background: rgba(200, 200, 200, 0.3);
+    border-radius: 11%;
+    font-family: 'Acme', sans-serif;
+    color: darkblue;
+    text-shadow: 0 0 1px azure;
+    font-weight: 800;
+    font-size: 28px;
+    margin-top: 20px;
+    margin-left: 75px;
+    height: 80px;
+    width: 190px;
+    text-align: center;
+    line-height: 40px;
+}
+
+/* Buttons */
+.myBtn {
+    margin: 10px;
+    margin-top: 30px;
+    color: white;
+    font-size: 20px;
+    border-radius: 50%;
+    height: 95px;
+    width: 95px;
+}
+
+.myBtn:hover {
+    cursor: pointer;
+}
+
+#dealBtn {
+    position: relative;
+    right: 65px;
+    bottom: 20px;
+    background: url("images/deal.png");
+    background-size: cover;
+}
+
+#hitBtn {
+    background: url("images/hit.png");
+    background-size: cover;
+    bottom: 75%;
+}
+
+#holdBtn {
+    background: url("images/stand.png");
+    background-size: cover;
+    bottom: 75%;
+}
+
+/* Credit and Bets container */
+.betDiv {
+    background: rgba(175, 200, 175, 0.3);
+    background-size: cover;
+    border-radius: 2.5%;
+    width: 70%;
+    padding: 5px;
+    position: relative;
+    top: 30px;
+    left: 70px;
+    font-family: 'Aldrich', sans-serif;
+    color: black;
+    text-shadow: 0px 0px 1px springgreen;
+    font-size: 130%;
+    font-weight: 1000;
+}
+
+/* bet input box */
+.betDiv input {
+    text-align: center;
+    background: navajowhite;
+    color: seagreen;
+    text-shadow: 0 0 3px black;
+    width: 36%;
+}
+
+/* Shekel sign */
+.shekel {
+    font-size: 25px;
+    font-weight: 900;
+}
+
+/** Responsive adjustments **/
+@media (max-width: 1400px) {
+    #speechBubble {
+        height: 130px;
+        width: 200px;
+        top: 9%;
+    }
+    #infoBox {
+        height: 90%;
+        width: 90%;
+        top: 5%;
+        right: 5%;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .myBtn {
+        margin: 7.5px;
+        margin-top: 25px;
+        font-size: 17px;
+        height: 75px;
+        width: 75px;
+    }
+    #dealBtn {
+        right: 35px;
+        bottom: 35px;
+    }
+    .betDiv {
+        width: 64%;
+        height: 60%;
+        padding: 5px;
+        top: 25px;
+        left: 50px;
+        font-size: 100%;
+        font-weight: 1000;
+    }
+    .betDiv input {
+        height: 47.5%;
+        width: 30%;
+    }
+    .shekel {
+        font-size: 20px;
+        font-weight: 800;
+    }
+    .scoreDiv {
+        font-weight: 800;
+        font-size: 20px;
+        margin-top: 20px;
+        margin-left: 20px;
+        height: 80px;
+        width: 160px;
+        line-height: 37px;
+    }
+    #speechBubble {
+        height: 125px;
+        width: 190px;
+        top: 8%;
+    }
+    #infoBox {
+        height: 90%;
+        width: 90%;
+        top: 5%;
+        right: 5%;
+        font-size: 12px;
+    }
+    .cardClass .card, .deck, .bottomCol {
+        height: 86%;
+        width: auto;
+        top: 5%;
+        left: 0px;
+    }
+}
+
+@media (max-width: 960px) {
+    .myBtn {
+        font-size: 15px;
+        height: 55px;
+        width: 55px;
+    }
+    #dealBtn {
+        right: 22px;
+        bottom: 25px;
+    }
+    .betDiv {
+        width: 75%;
+        height: 50%;
+        padding: 2.5px;
+        top: 20px;
+        left: 45px;
+        font-size: 75%;
+        font-weight: 1000;
+    }
+    .betDiv input {
+        height: 44%;
+        width: 36%;
+    }
+    .shekel {
+        font-size: 14px;
+        font-weight: 750;
+    }
+    .scoreDiv {
+        font-size: 17px;
+        margin-top: 18px;
+        margin-left: 16px;
+        height: 75px;
+        width: 150px;
+        line-height: 32px;
+    }
+    #speechBubble {
+        height: 117.5px;
+        width: 180px;
+        top: 8%;
+    }
+    #infoBox {
+        height: 90%;
+        width: 90%;
+        top: 5%;
+        right: 5%;
+        font-size: 11px;
+    }
+    .cardClass .card, .deck, .bottomCol {
+        height: 80%;
+        width: auto;
+        top: 2.5%;
+        left: 0px;
+    }
+
+}
+
+@media (max-width: 850px) {
+    #speechBubble {
+        visibility: hidden;
+    }
+    #infoBox {
+        visibility: hidden;
+    }
+    #dealerDiv {
+        background-size: cover;
+    }
+}
