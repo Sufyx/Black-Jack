@@ -1,8 +1,6 @@
 /**
  * @author Asaf Gilboa
- * SV-College Front-End course
  * Black-Jack project script
- * August 2019
  */
 
 
