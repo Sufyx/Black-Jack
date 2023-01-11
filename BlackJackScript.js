@@ -1,21 +1,17 @@
 /**
- * @author Asaf Gilboa
- * Black-Jack project script
+* Black-Jack project
+* Asaf Gilboa
  */
 
 
-
-/*** Global variables ***/
-
 // Arrays for card suits and ranks, named to match image file names
-var suits =['_of_hearts','_of_diamonds','_of_clubs','_of_spades']; 
+var suits = ['_of_hearts', '_of_diamonds', '_of_clubs', '_of_spades'];
 var rank = new Array(14);
 rank[1] = "ace";
 rank[11] = "jack";
 rank[12] = "queen";
 rank[13] = "king";
-rank[0] = "joker"; // Not included in current release
-
+rank[0] = "joker"; // Currently not included
 
 var turnDraws; // Number of draws so far in round
 var pHand; // Sum of card values in the player's hand
@@ -28,80 +24,65 @@ var credit = 100; // Remaining player credit
 var dealerMessage = document.getElementById("infoBox");
 
 
-
-startGame();
-
-
 /**
- * Starts a new game
- * Updates deck, buttons and message
+ * Disable game buttons and enable bet buttons
  */
-function startGame() {
-    for (var i=2; i <= 10; i++) {
-        rank[i] = i;
-    }
-    setBetBtns(); // Prepare buttons for bet phase
-    document.getElementById("playerCredit").innerHTML = credit; // Update credit 
-    // Update info bubble
-    dealerMessage.innerHTML = "Please place your bet and press <b>Deal</b>.<br/> Let's have a good time :)";
+function setBetBtns() {
+    document.getElementById("hitBtn").disabled = true;
+    document.getElementById("holdBtn").disabled = true;
+    document.getElementById("bet").disabled = false;
+    document.getElementById("dealBtn").disabled = false;
 }
 
 
-/**
- * Makes sure the player has entered a valid bet value
- * and moves to draw phase if they did
- * Activated when player clicks 'Deal'
- */
-function activate() {
+startGame();
+function startGame() {
+    for (var i = 2; i <= 10; i++) {
+        rank[i] = i;
+    }
+    setBetBtns();
+    document.getElementById("playerCredit").innerHTML = credit;
+    dealerMessage.innerHTML = "Please place your bet and press <b style='color:blue;'>Deal</b>.<br/> Let's have a good time :)";
+}
 
-    let roundBet; // current bet value
+/**
+ * "Deal" button click handler"
+ */
+function dealClick() {
+    let roundBet;
     roundBet = parseInt(document.getElementById("bet").value);
-     
-    // When the player runs out of credit
+
     if (credit <= 0) {
-        dealerMessage.innerHTML = "You seem to be out of money. Exit is to your left, loser.";
+        dealerMessage.innerHTML = 'You seem to be out of "money" ...';
         document.getElementById("bet").disabled = true;
         document.getElementById("dealBtn").disabled = true;
         document.getElementById("hitBtn").disabled = true;
         document.getElementById("holdBtn").disabled = true;
     } else {
-
-        // Check that the player entered a valid bet value
-        console.log(`bet = ${roundBet}`);
-        if ( (roundBet <= 0) || (isNaN(roundBet)) ) {
-            dealerMessage.innerHTML = "Please enter a bet in a positive number. smartass.";
+        if ((roundBet <= 0) || (isNaN(roundBet))) {
+            dealerMessage.innerHTML = "Please enter a bet in a positive number.";
         } else if (roundBet > credit) {
-            dealerMessage.innerHTML = "You don't have enough money.<br/>Choose a lower bet and press <b>Deal</b>.";
+            dealerMessage.innerHTML = "You don't have enough money.<br/>Choose a lower bet and press <b style='color:blue;'>Deal</b>.";
         } else {
-            drawPhase(); // If bet value is valid, enter draw phase
+            drawPhase();
         }
-
-        // In case player repeatedly enters illegal bet values
         badBet++;
         if (badBet > 4) {
-            dealerMessage.innerHTML = "DON'T MAKE ME CALL SECURITY!<br/>Choose a legal bet.";  
+            dealerMessage.innerHTML = " . . . <br/>choose a legal bet.";
         }
     }
-    
 }
 
 
-/**
- * After bets are done, start the drawing phase
- * Initializes global variables and performs mandatory first draws
- */
 function drawPhase() {
+    dealerMessage.innerHTML = `Press <b style='color:green;'>Hit</b> to flip next card, 
+        for a maximum of five.<br/>Press <b style='color:red;'>Stand</b> to end your turn.`
 
-    // Info bubble message
-    dealerMessage.innerHTML = `Press <b>Hit</b> to flip next card, for a total of five.<br/>Press <b>Stand</b> to end your turn.`
-
-    // Enable draw buttons and disable bet buttons
     document.getElementById('hitBtn').disabled = false;
     document.getElementById('holdBtn').disabled = false;
     document.getElementById('dealBtn').disabled = true;
     document.getElementById('bet').disabled = true;
 
-    // Initializes global variables
     turnDraws = 0;
     pHand = 0;
     dHand = 0;
@@ -113,28 +94,23 @@ function drawPhase() {
         document.getElementById(`dealer${i}`).innerHTML = ``;
     }
 
-    // This is a 2d boolean array where card rank and suit are represented by the indexes
-    // will keep track of cards drawn in round
+    // Keeps track of cards drawn so far in current round
     gameDeck = new Array(14);
-    for (let j=1; j <=13; j++) {
+    for (let j = 1; j <= 13; j++) {
         gameDeck[j] = new Array(4);
-        for (let i=0; i <=3; i++) {
+        for (let i = 0; i <= 3; i++) {
             gameDeck[j][i] = false;
         }
     }
 
-    // Reset card animations
-    let j = document.getElementsByClassName('cardClass');
-    for (let i = 0; i < j.length; i++) {
-        j[i].style.transform = 'none';
+    let cards = document.getElementsByClassName('cardClass');
+    for (let i = 0; i < cards.length; i++) {
+        cards[i].style.transform = 'none';
     }
-    
-    // Flip 1 card for the dealer and 2 for the player
+
     hitDealer(1);
     hitMe();
     hitMe();
-
-    // If player gets 'Natural Blackjack', automatic win
     if (pHand == 21) {
         win(true);
     }
@@ -142,130 +118,98 @@ function drawPhase() {
 
 
 /**
- * Performs a single draw for the dealer
- * Activated when player clicks 'Hit'
+ * Player card flip
  */
 function hitMe() {
-    
-    turnDraws++; // Update turn counter
-    let cardRank = flip(turnDraws, 'p'); // Randomly draw a card, present it and get its value
+    turnDraws++; 
+    let cardRank = flip(turnDraws, 'p');
 
-    // Update the dealer's hand worth so far
-    if (cardRank == 1) { // Drew an Ace
+    // Update player hand
+    if (cardRank == 1) {
         pAces++;
         pHand += 10;
     }
-    if (cardRank <= 10) { // Drew a card between 2 and 9
+    if (cardRank <= 10) {
         pHand += cardRank;
     } else {
         pHand += 10;
     }
-
-   // Determine if aces should be 11 or 1
-    if ( (pHand > 21) && (pAces > 0) ) {
-        pAces = pAces -1;
+    if ((pHand > 21) && (pAces > 0)) {
+        pAces = pAces - 1;
         pHand = pHand - 10;
     }
 
-    // Update scoreboard
     document.getElementById('playerScore').innerHTML = pHand;
-    
-    // Player hands passed value of 21
-    if (pHand > 21 ) {
+
+    if (pHand > 21) {
         lose();
     } else { // Conditions for ending player turn
-        if ( ((pHand == 21) && (turnDraws > 2)) || (turnDraws >=5 ) ) {
+        if (((pHand == 21) && (turnDraws > 2)) || (turnDraws >= 5)) {
             dealerTurn();
         }
     }
 }
 
-
 /**
- * Performs a full turn for the dealer
- * Activated when player clicks 'Stand'
- */
-function dealerTurn() {
-    dealerMessage.innerHTML = "</br></br>Dealer turn.";
-    document.getElementById("hitBtn").disabled = true;
-    document.getElementById("holdBtn").disabled = true;
-
-    let draws = 2; // Number of draws
-
-    // Keep drawing cards until dealer hands either beats player hand or reaches 5 cards
-    while ((dHand < pHand) && (draws <= 5) ) {
-        hitDealer(draws);
-        draws++;
-    }
-
-    // Check who won
-    setTimeout(function(){
-        if ( (dHand < pHand) || (dHand > 21) ) {
-            win(false);
-        } else {
-            lose();
-        }
-    }, 700 * (draws - 1)); 
-
-}
-
-
-/**
- * Performs a single draw for the dealer
- * 
- * @param {Number} drawNum - Which card draw is it this turn
+ * Dealer card flip
  */
 function hitDealer(drawNum) {
+    let cardRank = flip(drawNum, `d`);
 
-    let cardRank = flip(drawNum,`d`); // Randomly draw a card, present it and get its value
-
-    // Update the dealer's hand worth so far
-    if (cardRank == 1) { // Drew an Ace
+    if (cardRank == 1) { 
         dAces++;
         dHand += 10;
     }
-    if (cardRank <= 10) { // Drew a card between 2 and 9
+    if (cardRank <= 10) { 
         dHand += cardRank;
     } else {
         dHand += 10;
     }
 
-    // Determine if aces should be 11 or 1
-    if ( (dHand > 21) && (dAces > 0) ) {
-        dAces = dAces -1;
+    if ((dHand > 21) && (dAces > 0)) {
+        dAces = dAces - 1;
         dHand = dHand - 10;
     }
 
-    // Update the scoreboard
-    // document.getElementById("dealerScore").innerHTML = dHand;
-    setTimeout(function(){
+    setTimeout(function () {
         document.getElementById("dealerScore").innerHTML = dHand;
-    }, 1000 * drawNum);    
-    
+    }, 1000 * drawNum);
+}
+
+
+function dealerTurn() {
+    dealerMessage.innerHTML = "</br></br>Dealer turn.";
+    document.getElementById("hitBtn").disabled = true;
+    document.getElementById("holdBtn").disabled = true;
+
+    let draws = 2;
+    while ((dHand < pHand) && (draws <= 5)) {
+        hitDealer(draws);
+        draws++;
+    }
+
+    setTimeout(function () {
+        if ((dHand < pHand) || (dHand > 21)) {
+            win(false);
+        } else {
+            lose();
+        }
+    }, 700 * (draws - 1));
 }
 
 
 /**
- * Performs a single card draw
- * Visually presents the card, and returns its value
- * 
- * @param {NUMBER} drawNum  - Which card draw is it this turn
- * @param {CHAR} side - Is it a player draw ('p') or a dealer draw ('d')
+ * Single card flip/draw
  */
 function flip(drawNum, side) {
-
-    // Randomize number and shape for a card that wasn't used yet
-    let cardShape; 
-    let cardRank; 
+    let cardShape;
+    let cardRank;
     do {
         cardShape = getRandom(4) - 1;
-        cardRank = getRandom(13) ;
+        cardRank = getRandom(13);
     } while (gameDeck[cardRank][cardShape]);
-
-    // Update the deck with the newly drawn card
     gameDeck[cardRank][cardShape] = true;
 
-    // Get the element to present the card
     let flipped = document.getElementsByClassName('cardClass');
     let cardIndex;
     if (side == `p`) {
@@ -274,99 +218,63 @@ function flip(drawNum, side) {
         cardIndex = drawNum - 1;
     }
 
-
-    // Animate the card drawn onto the board
-    let widthFactor = 230;
-    let flipSpace = 93;
+    // Animate card draw
+    let widthFactor = 160;
+    let flipSpace = 45;
     switch (true) {
         case ((window.innerWidth <= 1300) && (window.innerWidth > 960)):
-            widthFactor = 170;
-            flipSpace = 70;
-            break;
-        case ((window.innerWidth <= 960) && (window.innerWidth > 600)):
             widthFactor = 150;
-            flipSpace = 50;
+            flipSpace = 40;
             break;
         case ((window.innerWidth <= 960) && (window.innerWidth > 600)):
+            widthFactor = 120;
+            flipSpace = 15;
+            break;
+        case ((window.innerWidth <= 600)):
             widthFactor = 100;
-            flipSpace = 40;
-            break;    
+            flipSpace = 5;
+            break;
         default:
             break;
     }
-
-    let delay = 0;
+    let delay = 400;
     if (side == `d`) {
-        delay = 400 * (drawNum);
+        delay += 400 * (drawNum);
     }
-
-    setTimeout(function(){
+    setTimeout(function () {
         let fullCard = "<img src='images/cards/" + (rank[cardRank] + suits[cardShape]) + ".png' class='card' >";
-        flipped[cardIndex].innerHTML += fullCard; 
+        flipped[cardIndex].innerHTML += fullCard;
         flipped[cardIndex].style.transform = "translateX(" + (widthFactor + flipSpace * drawNum) + "px)";
-        // console.log(`cclass: ${cardIndex} |card: ${rank[cardRank]} of ${suits[cardShape]} |side=${side}`);
     }, delay);
-    
 
-    return cardRank; // Returns the numerical value of the drawn card
+    return cardRank;
 }
 
 
-/**
- * Activated when the dealer wins the round
- */
 function lose() {
-
-    setBetBtns(); // Disable/Enable buttons for a new round
-
-    // Update remaining credit and prepare new round
+    setBetBtns(); 
     var b = parseInt(document.getElementById("bet").value);
     dealerMessage.innerHTML = "You lose! </br> Lost &#8362;" + b + ".<br/>";
-    dealerMessage.innerHTML += "Please place your next bet and press <b>Deal</b>.";
+    dealerMessage.innerHTML += "Please place your next bet and press <b style='color:blue;'>Deal</b>.";
     credit = credit - b;
     document.getElementById("playerCredit").innerHTML = credit;
 }
 
 
-
-/**
- * Activated when the player wins.
- * 
- * @param {Boolean} isBJ - True if player drew a 'Blackjack' (Ace + Royal)
- */
 function win(isBJ) {
-    
-    setBetBtns(); // Disable/Enable buttons for a new round
-
-    // Update remaining credit and prepare new round
+    setBetBtns();
     var b = parseInt(document.getElementById("bet").value);
     if (isBJ) {
         dealerMessage.innerHTML = "BLACKJACK!<br/> You win :D";
     } else {
         dealerMessage.innerHTML = "You win!";
     }
-    dealerMessage.innerHTML += "</br>Gained &#8362;" + b + ".<br/>" + "Please place your next bet and press <b>Deal</b>.";
+    dealerMessage.innerHTML += "</br>Gained &#8362;" + b + ".<br/>" + "Please place your next bet and press <b style='color:blue;'>Deal</b>.";
     credit = credit + b;
     document.getElementById("playerCredit").innerHTML = credit;
-
 }
 
 
-/**
- * Disable game buttons and enable bet buttons
- */
-function setBetBtns() {   
-    document.getElementById("hitBtn").disabled = true;
-    document.getElementById("holdBtn").disabled = true;
-    document.getElementById("bet").disabled = false;
-    document.getElementById("dealBtn").disabled = false;
-}
-
-
- /**
-  * Returns a random interger between 1 and max
-  * @param {*} max - Maximum range for the randomized number
-  */
 function getRandom(max) {
     var r = Math.random() * max + 1; // [1,max] 
     r = Math.floor(r);

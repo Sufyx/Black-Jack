@@ -1,170 +1,91 @@
 <!--
- * @author Asaf Gilboa
- * Black-Jack project html
+* Black-Jack project
+* Asaf G
 -->
 
 <!doctype html>
 <html lang='en'>
-  <head>
-    <title>BlackJack</title>
-    <!-- Required meta tags -->
+
+<head>
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
 
-    <!--Google Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Acme|Aldrich|Itim' rel='stylesheet'>
-
-    <!-- Bootstrap CSS -->
-    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>
-  
-    <!-- MY CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link href='BlackJackStyle.css' rel='stylesheet'>
 
+    <title>BlackJack</title>
 </head>
-  <body>
 
-        <div class='mainCont'> <!-- main container -->
+<body>
+    <div class='mainCont'>
 
-            <!--****************** DEALER TABLE ******************-->
-            <div id='dealerDiv'>
-                
-                <div class='row topRow'>  
-                    <div class='col-xs-4 col-sm-4 col-md-4 col-lg-4'>
-                        
-                        <div class='scoreDiv'> <!-- dealer score -->
-                            <span>Dealer Hand: </span><br/>
-                            <span id='dealerScore'>-</span>
-                        </div>  
-    
-                    </div>
-    
-                    <div class='col-xs-4 col-sm-4 col-md-4 col-lg-4'>       
-                    </div>
-    
-                    <div class='col-xs-4 col-sm-4 col-md-4 col-lg-4'>
-
-                        <!-- dealer's speech bubble' -->
-                        <!-- <img id='infoBox' src="images/speechBubble.png" alt="Dealer Message"> -->
-                        <div id='speechBubble'>
-                            <div id='infoBox'></div>
-                        </div>
-                             
-    
-                    </div>
-                
-                </div> <!-- end of dealer top row -->
-    
-                <div class='row bottomRow'>
-                         
-                    <div class='col-xs-2 col-sm-2 col-md-2 col-lg-2 bottomCol'>
-    
-                        <!-- dealer cards -->
-                        <img src='images/cards/cardback.jpg' class='deck'>
-                        <form id='dealerForm'>            
-                        <div id='dealer1' class='cardClass'></div> <!-- cardClass 0-->
-                        <div id='dealer2' class='cardClass'></div> <!-- cardClass 1-->
-                        <div id='dealer3' class='cardClass'></div> <!-- cardClass 2-->
-                        <div id='dealer4' class='cardClass'></div> <!-- cardClass 3-->
-                        <div id='dealer5' class='cardClass'></div> <!-- cardClass 4-->
-                        </form>
-                    </div> <!-- end of left 2 colums -->
-                
-                    <div class='col-xs-8 col-sm-8 col-md-8 col-lg-8 hand'>
-                        
-                    </div> <!-- end of mid 8 colums -->
-    
-                    <div class='col-xs-2 col-sm-2 col-md-2 col-lg-2'>
-                        
-                    </div> <!-- end of right 2 colums -->
-                    
-    
-                </div> <!-- end of dealer row -->
-                
-            </div> <!-- end of dealerDiv -->
-    
-    
-            <!--****************** PLAYER TABLE ******************-->
-            <div class='playerDiv'>
-                    
-                <div class='row topRow'>  
-                    
-                    <div class='col-xs-4 col-sm-4 col-md-4 col-lg-4'>                   
-                        <div class='scoreDiv'> <!-- player score -->              
-                            <span>Player Hand: </span><br/>
-                            <span id='playerScore'>-</span>
-                        </div>        
-                    </div>
-    
-                    <div class='col-xs-4 col-sm-4 col-md-4 col-lg-4'>
-    
-                        <!-- Hit button -->
-                        <button type='button' class='btn btn-default myBtn' id='hitBtn' onclick='hitMe()'></button>
-    
-                        <!-- Stand button -->
-                        <button type='button' class='btn btn-default myBtn' id='holdBtn' onclick='dealerTurn()'></button>
-                        
-                    </div>
-    
-                    <div class='col-xs-4 col-sm-4 col-md-4 col-lg-4'>
-    
-                        <!-- Money and bets -->
-                        <div class='betDiv'>
-                            <span>You have: </span>
-                            <span class='shekel'>&#8362;</span>
-                            <span id='playerCredit'></span>
-                            <br/>
-                            <span>Your bet: </span>
-                            <input type='number' value='10' id='bet'>
-                        </div>
-    
-                    </div>
-                    
-                    
-    
+        <div id='dealerDiv'>
+            <div class='myRow topRow'>
+                <div class='scoreDiv'>
+                    <span>Dealer Hand: </span><br />
+                    <span id='dealerScore'>-</span>
                 </div>
-                    
-                <div class='row bottomRow'>
-                         
-                    <div class='col-xs-2 col-sm-2 col-md-2 col-lg-2 bottomCol'>
-    
-                        <!-- player cards -->
-                        <img src='images/cards/cardback.jpg' class='deck'>
-                        <form id='myForm'>            
-                        <div id='player1' class='cardClass'></div> <!-- cardClass 5-->
-                        <div id='player2' class='cardClass'></div> <!-- cardClass 6-->
-                        <div id='player3' class='cardClass'></div> <!-- cardClass 7-->
-                        <div id='player4' class='cardClass'></div> <!-- cardClass 8-->
-                        <div id='player5' class='cardClass'></div> <!-- cardClass 9-->
-                        </form> 
-    
-                    </div> <!-- end of left 2 colums -->
-                
-                    <div class='col-xs-8 col-sm-8 col-md-8 col-lg-8 hand'>
-                        
-                    </div> <!-- end of mid 8 colums -->
-    
-                    <div class='col-xs-2 col-sm-2 col-md-2 col-lg-2'>
-    
-                        <!-- Deal button -->
-                        <button type='button' class='btn btn-default myBtn' id='dealBtn' onclick='activate()'></button>
-    
-                    </div> <!-- end of right 2 colums -->
-    
-                </div> <!-- end of player row -->
-    
-            </div> <!-- end of playerDiv -->
-            
-            
-        </div> <!-- end of main container -->
-      
+                <div id='speechBubble'>
+                    <div id='infoBox'></div>
+                </div>
+            </div>
+            <div class='myRow bottomRow'>
+                    <img src='images/cards/cardback.jpg' class='deck'>
+                    <form id='dealerForm' class="cardDisplay">
+                        <div id='dealer1' class='cardClass'></div>
+                        <div id='dealer2' class='cardClass'></div>
+                        <div id='dealer3' class='cardClass'></div>
+                        <div id='dealer4' class='cardClass'></div>
+                        <div id='dealer5' class='cardClass'></div>
+                    </form>
+            </div>
+        </div>
 
-    <!--My JS-->
+        <div id='playerDiv'>
+            <div class='myRow topRow'>
+                <div class='scoreDiv'>
+                    <span>Player Hand: </span><br />
+                    <span id='playerScore'>-</span>
+                </div>
+                    <button type='button' class='btn btn-default myBtn' id='hitBtn' onclick='hitMe()'>
+                    </button>
+                    <button type='button' class='btn btn-default myBtn' id='holdBtn' onclick='dealerTurn()'>
+                    </button>
+                <div id='betDiv'>
+                    <span>You have: </span>
+                    <span class='shekel'>&#8362;</span>
+                    <span id='playerCredit'></span>
+                    <br />
+                    <span>Your bet: </span>
+                    <input type='number' value='10' id='bet'>
+                </div>
+            </div>
+            <div class='myRow bottomRow'>
+                    <img src='images/cards/cardback.jpg' class='deck'>
+                    <form id='myForm' class="cardDisplay">
+                        <div id='player1' class='cardClass'></div>
+                        <div id='player2' class='cardClass'></div>
+                        <div id='player3' class='cardClass'></div>
+                        <div id='player4' class='cardClass'></div>
+                        <div id='player5' class='cardClass'></div>
+                    </form>
+                <button type='button' class='btn btn-default myBtn' id='dealBtn' onclick='dealClick()'></button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js'
+        integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1' crossorigin='anonymous'>
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.3.js"
+        integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous">
+    </script>
     <script src='BlackJackScript.js'></script>
+</body>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js' integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1' crossorigin='anonymous'></script>
-    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js' integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM' crossorigin='anonymous'></script>
-  </body>
 </html>
